@@ -1,0 +1,165 @@
+From ade5917e900b0c4645b9ac217026bb853accfd82 Mon Sep 17 00:00:00 2001
+From: David Lechner <david@pybricks.com>
+Date: Sun, 10 Nov 2019 19:56:45 -0600
+Subject: [PATCH] Add Technic Control+ hub support
+
+Add a new class for the Control+ hub as well as
+device ids for the new motors and internal devices
+
+Fixes #4
+---
+ bricknil/const.py        |  7 ++++
+ bricknil/hub.py          |  9 ++++++
+ bricknil/sensor/motor.py | 70 ++++++++++++++++++++++++++++++++++++++++
+ examples/technic_4x4.py  | 25 ++++++++++++++
+ 4 files changed, 111 insertions(+)
+ create mode 100755 examples/technic_4x4.py
+
+diff --git a/bricknil/const.py b/bricknil/const.py
+index 347c8e8..261a99b 100644
+--- a/bricknil/const.py
++++ b/bricknil/const.py
+@@ -55,7 +55,14 @@ class Color(Enum):
+                 0x002A:   'Duplo Train Speaker',
+                 0x002B:   'Duplo Train Color',
+                 0x002C:   'Duplo Train Speedometer',
++                0x002E:   'Technic Control+ Large Motor',
++                0x002F:   'Technic Control+ XL Motor',
++                0x0036:   'Powered Up Hub IMU Gesture',
+                 0x0037:   'Remote Button',
+                 0x0038:   'Remote Signal Level',
++                0x0039:   'Powered Up Hub IMU Accelerometer',
++                0x003A:   'Powered Up Hub IMU Gyro',
++                0x003B:   'Powered Up Hub IMU Position',
++                0x003C:   'Powered Up Hub IMU Temperature',
+             }
+ 
+diff --git a/bricknil/hub.py b/bricknil/hub.py
+index c9a0a3a..8c8b367 100644
+--- a/bricknil/hub.py
++++ b/bricknil/hub.py
+@@ -249,3 +249,12 @@ def __init__(self, name, query_port_info=False, ble_id=None):
+         super().__init__(name, query_port_info, ble_id)
+         self.ble_name = 'Train Base'
+         self.manufacturer_id = 32
++
++
++class CPlusHub(Hub):
++    """Technic Control+ Hub
++    """
++    def __init__(self, name, query_port_info=False, ble_id=None):
++        super().__init__(name, query_port_info, ble_id)
++        self.ble_name = "Control+ Hub"
++        self.manufacturer_id = 128
+diff --git a/bricknil/sensor/motor.py b/bricknil/sensor/motor.py
+index 92691f8..c52a922 100644
+--- a/bricknil/sensor/motor.py
++++ b/bricknil/sensor/motor.py
+@@ -293,6 +293,76 @@ class ExternalMotor(TachoMotor):
+     _sensor_id = 0x26
+ 
+ 
++class CPlusLargeMotor(TachoMotor):
++    """ Access the Technic Control Plus Large motors
++
++        These are similar to the :class:`InternalMotor` with build-in tachometer and
++        sensor for sending back the motor's current speed and position.  You
++        don't need to use the sensors, and can treat this as strictly an
++        output.
++
++        Examples::
++
++            # Basic connection to the motor on Port A
++            @attach(CPlusLargeMotor, name='motor')
++
++            # Report back when motor speed changes. You must have a motor_change method defined 
++            @attach(CPlusLargeMotor, name='motor', capabilities=['sense_speed'])
++
++            # Only report back when speed change exceeds 5 units, and position changes (degrees)
++            @attach(CPlusLargeMotor, name='motor', capabilities=[('sense_speed', 5), 'sense_pos'])
++
++        And then within the run body::
++
++            await self.motor.set_speed(50)   # Setting the speed
++            await self.motor.ramp_speed(80, 2000)  # Ramp speed to 80 over 2 seconds
++            await self.motor.set_pos(90, speed=20) # Turn clockwise to 3 o'clock position
++            await self.motor.rotate(60, speed=-50) # Turn 60 degrees counter-clockwise from current position
++
++        See Also:
++            * :class:`TrainMotor` for connecting to a train motor
++            * :class:`InternalMotor` for connecting to the Boost hub built-in motors
++
++    """
++
++    _sensor_id = 0x2E
++
++
++class CPlusXLMotor(TachoMotor):
++    """ Access the Technic Control Plus XL motors
++
++        These are similar to the :class:`InternalMotor` with build-in tachometer and
++        sensor for sending back the motor's current speed and position.  You
++        don't need to use the sensors, and can treat this as strictly an
++        output.
++
++        Examples::
++
++            # Basic connection to the motor on Port A
++            @attach(CPlusXLMotor, name='motor')
++
++            # Report back when motor speed changes. You must have a motor_change method defined 
++            @attach(CPlusXLMotor, name='motor', capabilities=['sense_speed'])
++
++            # Only report back when speed change exceeds 5 units, and position changes (degrees)
++            @attach(CPlusXLMotor, name='motor', capabilities=[('sense_speed', 5), 'sense_pos'])
++
++        And then within the run body::
++
++            await self.motor.set_speed(50)   # Setting the speed
++            await self.motor.ramp_speed(80, 2000)  # Ramp speed to 80 over 2 seconds
++            await self.motor.set_pos(90, speed=20) # Turn clockwise to 3 o'clock position
++            await self.motor.rotate(60, speed=-50) # Turn 60 degrees counter-clockwise from current position
++
++        See Also:
++            * :class:`TrainMotor` for connecting to a train motor
++            * :class:`InternalMotor` for connecting to the Boost hub built-in motors
++
++    """
++
++    _sensor_id = 0x2F
++
++
+ class TrainMotor(Motor):
+     """
+         Connects to the train motors.
+diff --git a/examples/technic_4x4.py b/examples/technic_4x4.py
+new file mode 100755
+index 0000000..b81ff97
+--- /dev/null
++++ b/examples/technic_4x4.py
+@@ -0,0 +1,25 @@
++#!/usr/bin/env python3
++
++import logging
++from curio import sleep
++from bricknil import attach, start
++from bricknil.hub import CPlusHub
++from bricknil.sensor.motor import CPlusXLMotor
++
++
++@attach(CPlusXLMotor, name='front_drive', port=0)
++@attach(CPlusXLMotor, name='rear_drive', port=1)
++class Truck(CPlusHub):
++
++    async def run(self):
++        self.message_info("Running")
++        await self.front_drive.set_speed(-100)
++        await self.rear_drive.set_speed(-100)
++        await sleep(20) # Give it enough time to gather data
++
++async def system():
++    hub = Truck('truck', True)
++
++if __name__ == '__main__':
++    logging.basicConfig(level=logging.DEBUG)
++    start(system)
