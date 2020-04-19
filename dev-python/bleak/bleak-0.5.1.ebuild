@@ -22,6 +22,7 @@ IUSE=""
 
 DEPEND=""
 RDEPEND="${DEPEND}
-	 !dev-python/bricknil-bleak"
+	 net-wireless/bluez
+	!dev-python/bricknil-bleak"
 
 RESTRICT=""
