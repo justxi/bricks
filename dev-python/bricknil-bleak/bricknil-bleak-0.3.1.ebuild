@@ -18,6 +18,7 @@ KEYWORDS="~amd64"
 IUSE=""
 
 DEPEND=""
-RDEPEND="${DEPEND}"
+RDEPEND="${DEPEND}
+	 !dev-python/bleak"
 
 RESTRICT=""
