@@ -11,7 +11,7 @@ HOMEPAGE="https://github.com/justxi/bricknil/"
 
 EGIT_REPO_URI="https://github.com/justxi/bricknil"
 EGIT_BRANCH="devel"
-EGIT_COMMIT="b78956100e187864f920931d33897e8faa4dd021"
+EGIT_COMMIT="768c50c40aaebb241014ca6442b6e6feaa58b923"
 
 LICENSE="Apache-2.0"
 SLOT="0"
