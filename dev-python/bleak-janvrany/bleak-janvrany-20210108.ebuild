@@ -21,5 +21,6 @@ IUSE=""
 DEPEND=""
 RDEPEND="${DEPEND}
 	 net-wireless/bluez
+         dev-python/txdbus
 	!dev-python/bleak
 	!dev-python/bricknil-bleak"
