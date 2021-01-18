@@ -1,0 +1,13 @@
+diff --git a/bricknil/bricknil.py b/bricknil/bricknil.py
+index fc042c9..d03ce1a 100644
+--- a/bricknil/bricknil.py
++++ b/bricknil/bricknil.py
+@@ -143,7 +143,7 @@ def run(program = None): #pragma: no cover
+         car.speed(0)
+     bricknil.run(program())
+     """
+-    async def main():
++    async def main(program):
+         await initialize()
+         try: 
+             await program()
