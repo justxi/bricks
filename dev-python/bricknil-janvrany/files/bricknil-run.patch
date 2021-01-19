@@ -15,7 +15,7 @@ diff --git a/bricknil/bricknil.py b/bricknil/bricknil.py
 index fc042c9..f5331d7 100644
 --- a/bricknil/bricknil.py
 +++ b/bricknil/bricknil.py
-@@ -143,12 +143,13 @@ def run(program = None): #pragma: no cover
+@@ -143,12 +143,12 @@ def run(program = None): #pragma: no cover
          car.speed(0)
      bricknil.run(program())
      """
@@ -26,8 +26,7 @@ index fc042c9..f5331d7 100644
              await program()
          finally:
 -            await finalize()
-+#            await finalize()
-+            pass
++            await finalize()
      loop = get_event_loop()
      loop.run_until_complete(main(program))
  
