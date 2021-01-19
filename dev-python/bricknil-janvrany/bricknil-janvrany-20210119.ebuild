@@ -25,6 +25,3 @@ RDEPEND="${DEPEND}
 
 RESTRICT=""
 
-#PATCHES=(
-#	"${FILESDIR}/bricknil-address.patch"
-#)
