@@ -12,10 +12,10 @@ index 27c2bc7..5f92ec9 100644
          await device.connect()
  
 diff --git a/bricknil/bricknil.py b/bricknil/bricknil.py
-index fc042c9..d03ce1a 100644
+index fc042c9..f90a0f3 100644
 --- a/bricknil/bricknil.py
 +++ b/bricknil/bricknil.py
-@@ -143,7 +143,7 @@ def run(program = None): #pragma: no cover
+@@ -143,12 +143,12 @@ def run(program = None): #pragma: no cover
          car.speed(0)
      bricknil.run(program())
      """
@@ -24,3 +24,10 @@ index fc042c9..d03ce1a 100644
          await initialize()
          try: 
              await program()
+-        finally:
+-            await finalize()
++#        finally:
++#            await finalize()
+     loop = get_event_loop()
+     loop.run_until_complete(main(program))
+ 
