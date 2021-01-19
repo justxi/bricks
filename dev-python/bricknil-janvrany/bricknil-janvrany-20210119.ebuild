@@ -10,7 +10,7 @@ DESCRIPTION="Control LEGO Bluetooth Sensors and Motors with Python"
 HOMEPAGE="https://github.com/janvrany/bricknil/"
 EGIT_REPO_URI="https://github.com/janvrany/bricknil"
 EGIT_BRANCH="wip/devel"
-EGIT_COMMIT="f9cf5b5a3c8bbb6cf95ddde06f53462dc1591199"
+EGIT_COMMIT="086ce26d323587bdbb2d59bc5bb3f07e4407b02d"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -26,5 +26,5 @@ RDEPEND="${DEPEND}
 RESTRICT=""
 
 #PATCHES=(
-#	"${FILESDIR}/bricknil-run.patch"
+#	"${FILESDIR}/bricknil-address.patch"
 #)
