@@ -18,6 +18,7 @@ IUSE=""
 DEPEND=""
 RDEPEND="${DEPEND}
 	dev-python/pyyaml
+        dev-python/curio
 	dev-python/bricknil-bleak
 	dev-python/bluebrick-Adafruit-BluefruitLE"
 
