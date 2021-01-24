@@ -19,6 +19,7 @@ IUSE=""
 
 DEPEND=""
 RDEPEND="${DEPEND}
-	 !dev-python/bleak"
+	 !dev-python/bleak
+          dev-python/twisted"
 
 RESTRICT=""
