@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_7 )
+PYTHON_COMPAT=( python3_7 python3_8 python3_9 )
 inherit distutils-r1 git-r3
 
 DESCRIPTION="Control LEGO Bluetooth Sensors and Motors with Python"
